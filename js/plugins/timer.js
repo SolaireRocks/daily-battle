@@ -1,24 +1,24 @@
 /*:
- * @plugindesc v3.0 Displays Variable 1 as MM:SS in the top-right during battle.
+ * @plugindesc v3.1 Displays Variable 1 as a raw number in the top-right during battle.
  * @author Your Name / AI Assistant
  * @target MZ
  * @help VariableClockDisplay.js
  *
- * Displays the value of a specified game variable, formatted as MM:SS,
+ * Displays the raw numerical value of a specified game variable
  * in the top-right corner of the battle screen only. Updates when the
- * variable changes. Every 60 units in the variable counts as one minute.
+ * variable changes.
  *
  * @param variableId
  * @text Variable ID
- * @desc The ID of the game variable to use as the counter.
+ * @desc The ID of the game variable to display.
  * @type variable
  * @default 1
  *
  * @param labelText
  * @text Label Text
- * @desc The text to display before the time value (e.g., "Count: ").
+ * @desc The text to display before the variable value (e.g., "Score: ").
  * @type string
- * @default Count:
+ * @default Value:
  *
  * @param xMargin
  * @text X Margin
@@ -58,15 +58,13 @@
 (() => {
     const pluginName = document.currentScript.src.match(/.+\/(.+)\.js/)[1] || "VariableClockDisplay";
     const parameters = PluginManager.parameters(pluginName);
-    const variableId = parseInt(parameters['variableId'] || 1); // Use the configured variable ID
-    const labelText = parameters['labelText'] || "Count: "; // Default label changed
+    const variableId = parseInt(parameters['variableId'] || 1);
+    const labelText = parameters['labelText'] || "Value: "; // Default label changed
     const xMargin = parseInt(parameters['xMargin'] || 10);
     const yMargin = parseInt(parameters['yMargin'] || 10);
     const settingFontSize = parseInt(parameters['fontSize'] || 0);
     const settingOpacity = parseInt(parameters['windowOpacity'] || 0);
     const settingPadding = parseInt(parameters['windowPadding'] || 6);
-
-    // We don't need battleStartFrame anymore
 
     //-----------------------------------------------------------------------------
     // Ensure Scene_Battle Exists
@@ -77,37 +75,37 @@
     }
 
     //-----------------------------------------------------------------------------
-    // Window_VariableClockDisplay
+    // Window_VariableValueDisplay
     //
-    // The window for displaying the variable value as MM:SS.
+    // The window for displaying the variable value as a raw number.
+    // Renamed class for clarity from Window_VariableClockDisplay
 
-    function Window_VariableClockDisplay() {
+    function Window_VariableValueDisplay() {
         this.initialize(...arguments);
     }
 
-    Window_VariableClockDisplay.prototype = Object.create(Window_Base.prototype);
-    Window_VariableClockDisplay.prototype.constructor = Window_VariableClockDisplay;
+    Window_VariableValueDisplay.prototype = Object.create(Window_Base.prototype);
+    Window_VariableValueDisplay.prototype.constructor = Window_VariableValueDisplay;
 
-    Window_VariableClockDisplay.prototype.initialize = function(rect) {
+    Window_VariableValueDisplay.prototype.initialize = function(rect) {
         Window_Base.prototype.initialize.call(this, rect);
-        this._variableId = variableId; // Store variable ID for easy access
+        this._variableId = variableId;
         this._lastVariableValue = -1; // Store the last known value to detect changes
-        this._lastFormattedTime = "0:00"; // Store the last displayed string
+        this._lastDisplayValue = "0"; // Store the last displayed string (raw number)
         this.opacity = settingOpacity;
         this.padding = settingPadding;
-        this.updateValueAndRefresh(); // Initial draw based on current variable value
+        this.updateValueAndRefresh(); // Initial draw
     };
 
-    Window_VariableClockDisplay.prototype.totalPadding = function() {
+    Window_VariableValueDisplay.prototype.totalPadding = function() {
          return (this.padding || Window_Base.prototype.padding) * 2;
     }
 
     // --- Calculate required width ---
-    Window_VariableClockDisplay.prototype.windowWidth = function() {
-        // Estimate width based on label and "MM:SS" format (e.g., "999:59")
-        // Adjust the "999" if you expect the variable to go into thousands often
-        const estimatedTime = "999:59";
-        const text = labelText + estimatedTime;
+    Window_VariableValueDisplay.prototype.windowWidth = function() {
+        // Estimate width based on label and a reasonable max number (e.g., 5-6 digits)
+        const estimatedValue = "99999"; // Adjust if you expect larger numbers
+        const text = labelText + estimatedValue;
         const fontSize = this.contentsFontSize();
         const padding = this.totalPadding();
         const textPadding = this.itemPadding() * 2;
@@ -120,12 +118,12 @@
         return Math.ceil(textWidth + padding + textPadding);
     };
 
-    Window_VariableClockDisplay.prototype.windowHeight = function() {
+    Window_VariableValueDisplay.prototype.windowHeight = function() {
         return this.fittingHeight(1); // Height for one line
     };
 
     // --- Font Size Handling (same as before) ---
-    Window_VariableClockDisplay.prototype.contentsFontSize = function() {
+    Window_VariableValueDisplay.prototype.contentsFontSize = function() {
         if (settingFontSize > 0) { return settingFontSize; }
         if ($gameSystem && typeof $gameSystem.mainFontSize === 'function') {
             return $gameSystem.mainFontSize();
@@ -133,49 +131,42 @@
         return 26; // Fallback MZ default
     };
 
-    Window_VariableClockDisplay.prototype.lineHeight = function() {
+    Window_VariableValueDisplay.prototype.lineHeight = function() {
          const usedFontSize = this.contentsFontSize();
          return usedFontSize + 8; // Standard calculation
     };
 
     // --- Update based on Variable Change ---
-    Window_VariableClockDisplay.prototype.update = function() {
+    Window_VariableValueDisplay.prototype.update = function() {
         Window_Base.prototype.update.call(this); // Perform base window updates
 
-        // Check if the variable's value has changed
         const currentValue = $gameVariables.value(this._variableId);
         if (currentValue !== this._lastVariableValue) {
             this.updateValueAndRefresh(currentValue);
         }
     };
 
-    // --- Calculate MM:SS and Refresh Display ---
-    Window_VariableClockDisplay.prototype.updateValueAndRefresh = function(currentValue = null) {
-        // If currentValue wasn't passed, get it now
+    // --- Store Value and Refresh Display ---
+    Window_VariableValueDisplay.prototype.updateValueAndRefresh = function(currentValue = null) {
         if (currentValue === null) {
             currentValue = $gameVariables.value(this._variableId);
         }
 
         this._lastVariableValue = currentValue; // Store the new value
 
-        // Calculate "Minutes" and "Seconds" based on the variable value
-        const totalValue = Math.max(0, currentValue); // Ensure non-negative
-        const minutes = Math.floor(totalValue / 60);
-        const seconds = totalValue % 60;
+        // *** CHANGE: Directly use the variable value as a string ***
+        this._lastDisplayValue = String(Math.max(0, currentValue)); // Ensure non-negative and convert to string
 
-        // Format MM:SS with leading zeros for seconds
-        this._lastFormattedTime = String(minutes) + ":" + String(seconds).padStart(2, '0');
-
-        // Now refresh the window contents
-        this.refresh();
+        this.refresh(); // Refresh the window contents
     };
 
 
     // --- Refresh drawing ---
-    Window_VariableClockDisplay.prototype.refresh = function() {
+    Window_VariableValueDisplay.prototype.refresh = function() {
         if (this.contents) {
             this.contents.clear();
-            const text = labelText + this._lastFormattedTime; // Display the formatted value
+            // *** CHANGE: Use the stored raw value string ***
+            const text = labelText + this._lastDisplayValue;
             const width = this.contentsWidth();
 
             this.resetFontSettings();
@@ -187,40 +178,41 @@
 
     //-----------------------------------------------------------------------------
     // Scene_Battle Modifications
-    //
-    // Create and add the window.
     //-----------------------------------------------------------------------------
 
-    // Keep the alias to ensure window creation happens correctly
     const _Scene_Battle_createAllWindows = Scene_Battle.prototype.createAllWindows;
     Scene_Battle.prototype.createAllWindows = function() {
-        _Scene_Battle_createAllWindows.call(this); // Call original first
-        this.createVariableClockDisplayWindow();
+        _Scene_Battle_createAllWindows.call(this);
+        this.createVariableValueDisplayWindow(); // Renamed function call
     };
 
-    Scene_Battle.prototype.createVariableClockDisplayWindow = function() {
-        // Calculate Rect
+    // Renamed function for clarity
+    Scene_Battle.prototype.createVariableValueDisplayWindow = function() {
+        // Calculate Rect using the updated window class
         const dummyRect = new Rectangle(0, 0, 100, 50);
-        // Use the correct window constructor name here
-        const tempWindow = new Window_VariableClockDisplay(dummyRect);
+        // *** CHANGE: Use the correct window constructor name ***
+        const tempWindow = new Window_VariableValueDisplay(dummyRect);
         const width = tempWindow.windowWidth();
         const height = tempWindow.windowHeight();
         const x = Graphics.boxWidth - width - xMargin;
         const y = yMargin;
         const finalRect = new Rectangle(x, y, width, height);
-        if (tempWindow.contents) tempWindow.contents.destroy();
+        if (tempWindow.contents) tempWindow.contents.destroy(); // Clean up temp contents
 
-        // Create the actual window (using the correct constructor)
-        this._variableClockDisplayWindow = new Window_VariableClockDisplay(finalRect);
-        this.addWindow(this._variableClockDisplayWindow);
+        // Create the actual window
+        // *** CHANGE: Use the correct window constructor name ***
+        this._variableValueDisplayWindow = new Window_VariableValueDisplay(finalRect);
+        this.addWindow(this._variableValueDisplayWindow);
     };
 
-    // Ensure terminate alias is still safe (though we removed specific logic)
+    // Terminate alias remains safe, though no specific logic needs removing here now
     const _Scene_Battle_terminate = Scene_Battle.prototype.terminate;
     Scene_Battle.prototype.terminate = function() {
         _Scene_Battle_terminate.call(this);
+        // Clean up reference if the window exists (good practice)
+        this._variableValueDisplayWindow = null;
     };
 
-    console.log(`[${pluginName}] Plugin loaded successfully.`);
+    console.log(`[${pluginName}] Plugin loaded successfully (Displays raw variable value).`);
 
 })();
