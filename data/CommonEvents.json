@@ -29,5 +29,15 @@ null,
 {"id":27,"list":[{"code":122,"indent":0,"parameters":[1,1,1,0,25]},{"code":0,"indent":0,"parameters":[]}],"name":"+25 to timer","switchId":1,"trigger":0},
 {"id":28,"list":[{"code":122,"indent":0,"parameters":[1,1,1,0,26]},{"code":0,"indent":0,"parameters":[]}],"name":"+26 to timer","switchId":1,"trigger":0},
 {"id":29,"list":[{"code":122,"indent":0,"parameters":[1,1,1,0,27]},{"code":0,"indent":0,"parameters":[]}],"name":"+27 to timer","switchId":1,"trigger":0},
-{"id":30,"list":[{"code":122,"indent":0,"parameters":[1,1,1,0,28]},{"code":0,"indent":0,"parameters":[]}],"name":"+28 to timer","switchId":1,"trigger":0}
+{"id":30,"list":[{"code":122,"indent":0,"parameters":[1,1,1,0,28]},{"code":0,"indent":0,"parameters":[]}],"name":"+28 to timer","switchId":1,"trigger":0},
+{"id":31,"list":[{"code":122,"indent":0,"parameters":[1,1,2,0,20]},{"code":0,"indent":0,"parameters":[]}],"name":"-20 to timer","switchId":1,"trigger":0},
+{"id":32,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":33,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":34,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":35,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":36,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":37,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":38,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":39,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0},
+{"id":40,"list":[{"code":0,"indent":0,"parameters":[]}],"name":"","switchId":1,"trigger":0}
 ]
