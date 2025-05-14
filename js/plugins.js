@@ -14,5 +14,9 @@ var $plugins =
 {"name":"timer","status":true,"description":"v4.0 Displays the last two digits of a variable in the top-right of the battle screen,\r\nwith a box, large numbers, and dynamic color changes.","parameters":{"variableId":"1","xMargin":"30","yMargin":"30","digitFontSize":"48","windowOpacity":"255","windowPadding":"10"}},
 {"name":"damage boost","status":true,"description":"v1.0 [Test] Variable Damage Boost - ALL (No Params)","parameters":{}},
 {"name":"DPS tracker","status":false,"description":"Displays rounds taken, total damage dealt, and average damage per round for each battler.","parameters":{"fontSize":"16","textColor":"#FFFFFF","offsetX":"10","offsetY":"-50","textWidth":"150","textHeight":"24"}},
-{"name":"battle menu patch","status":false,"description":"Patches VisuStella's Sideview Minimalistic Battle UI for bottom status and upward movement.","parameters":{"statusWindowBottomMargin":"20","statusWindowSpacing":"10","centerAlignBottomWindows":"true"}}
+{"name":"battle menu patch","status":false,"description":"Patches VisuStella's Sideview Minimalistic Battle UI for bottom status and upward movement.","parameters":{"statusWindowBottomMargin":"20","statusWindowSpacing":"10","centerAlignBottomWindows":"true"}},
+{"name":"SRD_HUDMakerUltra","status":true,"description":"Allows you to create and use HUDs for the map and battles.\r\nRequires the HUD Maker Ultra editor.","parameters":{"Auto-Reload HUD Data":"true","Enable Screenshots":"false","Hide Battle Status Window":"false","Hide Battle Selection Window":"false","Fade During Events":"true","Event Fade Opacity":"125","Fade Duration":"10","Map Visibility Code":"return true;","Battle Visibility Code":"return true;"}},
+{"name":"SRD_UltraBase","status":true,"description":"Contains code required for HUD Maker Ultra. Does not affect the RPG Maker codebase.","parameters":{}},
+{"name":"erasebattle","status":false,"description":"Removes the Actor Status Window in Battle","parameters":{}},
+{"name":"battle_UI_Change","status":true,"description":"Removes Actor Status Window and goes directly to Skill Menu in Battle.","parameters":{}}
 ];
