@@ -18,5 +18,7 @@ var $plugins =
 {"name":"SRD_UltraBase","status":true,"description":"Contains code required for HUD Maker Ultra. Does not affect the RPG Maker codebase.","parameters":{}},
 {"name":"SRD_HUDMakerUltra","status":true,"description":"Allows you to create and use HUDs for the map and battles.\r\nRequires the HUD Maker Ultra editor.","parameters":{"Auto-Reload HUD Data":"true","Enable Screenshots":"false","Hide Battle Status Window":"false","Hide Battle Selection Window":"false","Fade During Events":"true","Event Fade Opacity":"125","Fade Duration":"10","Map Visibility Code":"return true;","Battle Visibility Code":"return true;"}},
 {"name":"erasebattle","status":false,"description":"Removes the Actor Status Window in Battle","parameters":{}},
-{"name":"battle_UI_Change","status":true,"description":"Removes Actor Status Window and goes directly to Skill Menu in Battle.","parameters":{}}
+{"name":"battle_UI_Change","status":true,"description":"Removes Actor Status Window and goes directly to Skill Menu in Battle.","parameters":{}},
+{"name":"bigger_window","status":true,"description":"Makes the actor command window in battle bigger.","parameters":{"newWidth":"240","numVisibleRows":"4","maxCols":"2"}},
+{"name":"Battle_ui_no_select","status":true,"description":"Disables the ally actor selection window (Window_BattleActor) in battle.","parameters":{}}
 ];
