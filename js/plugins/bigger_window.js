@@ -23,7 +23,7 @@
 
     // --- Hardcoded Configuration ---
     const NEW_WINDOW_WIDTH = 450; // Original default is 192
-    const NUM_COLUMNS = 2;
+    const NUM_COLUMNS = 6;
     // For a 2-column layout displaying the usual 4 commands, we need 2 visual rows.
     const NUM_VISIBLE_ROWS_FOR_HEIGHT = 4;
 

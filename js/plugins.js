@@ -21,5 +21,5 @@ var $plugins =
 {"name":"battle_UI_Change","status":true,"description":"Removes Actor Status Window and modifies Battle Skill Menu.","parameters":{}},
 {"name":"bigger_window","status":true,"description":"Makes the actor command window 2x wider with 2 columns (hardcoded).","parameters":{}},
 {"name":"Battle_ui_no_select","status":true,"description":"Disables the ally actor selection window (Window_BattleActor) in battle.","parameters":{}},
-{"name":"just_icons","status":false,"description":"Forces skill commands in Actor Command Window to display only icons, even when selected.","parameters":{"targetCommandSymbol":"skill","centerIcon":"true"}}
+{"name":"just_icons","status":true,"description":"Displays only icons for 'singleSkill' commands in Actor Command, allows scaling, and hides names on highlight.","parameters":{"skillCommandSymbol":"singleSkill","centerIcons":"true","iconScale":"3"}}
 ];
