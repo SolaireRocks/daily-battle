@@ -2107,7 +2107,7 @@ if($.hideSelectionWindow) {
 //=============================================================================
 // * setupAutoReload
 //=============================================================================
-if($.autoReload) {
+if($.autoReload && Utils.isNwjs()) {
 
 function setupAutoReload() {
 	UltraHUDManager.checkHUDDataString(true);
